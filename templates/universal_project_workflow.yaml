@@ -1,0 +1,146 @@
+name: Update Project Journal
+description: |
+  Quick reminder workflow that triggers the AI agent to update PROJECT_JOURNAL.md
+  with the current work session. Works with any project using the documentation framework.
+  
+  This is a universal template - copy to PROJECT_ROOT/.warp/workflows/update_journal.yaml
+  
+command: |
+  echo "╔═══════════════════════════════════════════════════════════╗"
+  echo "║         PROJECT JOURNAL UPDATE WORKFLOW                  ║"
+  echo "╚═══════════════════════════════════════════════════════════╝"
+  echo ""
+  echo "📋 This workflow will trigger the AI agent to update"
+  echo "   docs/PROJECT_JOURNAL.md with your current work session."
+  echo ""
+  echo "✅ What the agent will do:"
+  echo "   1. Read current journal state"
+  echo "   2. Determine next session number"
+  echo "   3. Gather context from git commits and changed files"
+  echo "   4. Create new session section"
+  echo "   5. Update status tables"
+  echo "   6. Update next steps"
+  echo "   7. Increment document version"
+  echo "   8. Add session summary to appendix"
+  echo ""
+  echo "🔍 Files that will be checked:"
+  echo "   • docs/PROJECT_JOURNAL.md (required)"
+  echo "   • docs/ARCHITECTURE.md (if exists)"
+  echo "   • Recent git commits (last 24 hours)"
+  echo "   • Changed files (git diff)"
+  echo ""
+  echo "⚙️  Agent permissions needed:"
+  echo "   • Read files: Yes"
+  echo "   • Edit files: Yes (with confirmation)"
+  echo "   • Execute commands: Yes (for git commands)"
+  echo ""
+  echo "───────────────────────────────────────────────────────────"
+  echo ""
+  echo "💬 To proceed, tell the Warp AI agent:"
+  echo ""
+  echo "   \"Update the project journal with today's work\""
+  echo ""
+  echo "   Or use one of these phrases:"
+  echo "   • \"Document this session\""
+  echo "   • \"Add today's work to the journal\""
+  echo "   • \"Update the docs with what we accomplished\""
+  echo "   • \"We're done for today, update journal\""
+  echo ""
+  echo "───────────────────────────────────────────────────────────"
+  echo ""
+  echo "📚 Documentation Framework:"
+  echo "   This workflow follows the Universal Documentation Framework"
+  echo "   See: docs/DOCUMENTATION_FRAMEWORK.md (if exists)"
+  echo ""
+  echo "🎯 Quick Status Check:"
+  echo ""
+  
+  # Check if PROJECT_JOURNAL.md exists
+  if [ -f "docs/PROJECT_JOURNAL.md" ]; then
+    echo "   ✅ PROJECT_JOURNAL.md found"
+    
+    # Get last session number
+    LAST_SESSION=$(grep -E "^## Session [0-9]+" docs/PROJECT_JOURNAL.md | tail -1 | sed 's/## Session \([0-9]*\).*/\1/')
+    if [ -n "$LAST_SESSION" ]; then
+      NEXT_SESSION=$((LAST_SESSION + 1))
+      echo "   📝 Last session: $LAST_SESSION"
+      echo "   ➡️  Next session: $NEXT_SESSION"
+    else
+      echo "   📝 No sessions found - will create Session 1"
+    fi
+    
+    # Get current version
+    VERSION=$(grep -E "^\| [0-9]{4}-[0-9]{2}-[0-9]{2} \| [0-9]+\.[0-9]+ \|" docs/PROJECT_JOURNAL.md | tail -1 | awk '{print $4}')
+    if [ -n "$VERSION" ]; then
+      echo "   📌 Current version: $VERSION"
+    fi
+    
+    # Get last update date
+    LAST_DATE=$(grep -E "^\| [0-9]{4}-[0-9]{2}-[0-9]{2} \| [0-9]+\.[0-9]+ \|" docs/PROJECT_JOURNAL.md | tail -1 | awk '{print $2}')
+    if [ -n "$LAST_DATE" ]; then
+      echo "   📅 Last updated: $LAST_DATE"
+    fi
+    
+  else
+    echo "   ⚠️  PROJECT_JOURNAL.md not found at docs/PROJECT_JOURNAL.md"
+    echo "   💡 Agent can help create it from template"
+  fi
+  
+  echo ""
+  
+  # Check for other docs
+  if [ -f "docs/ARCHITECTURE.md" ]; then
+    echo "   ✅ ARCHITECTURE.md found"
+  elif [ -f "docs/CLINICAL_DIAGNOSTIC_CHAIN.md" ]; then
+    echo "   ✅ CLINICAL_DIAGNOSTIC_CHAIN.md found (architecture)"
+  else
+    echo "   ℹ️  No architecture doc found"
+  fi
+  
+  if [ -f "docs/DOCUMENTATION_FRAMEWORK.md" ]; then
+    echo "   ✅ DOCUMENTATION_FRAMEWORK.md found"
+  fi
+  
+  echo ""
+  echo "📊 Recent Activity:"
+  echo ""
+  
+  # Show recent commits
+  if git rev-parse --git-dir > /dev/null 2>&1; then
+    COMMIT_COUNT=$(git log --oneline --since="24 hours ago" 2>/dev/null | wc -l | tr -d ' ')
+    if [ "$COMMIT_COUNT" -gt 0 ]; then
+      echo "   • $COMMIT_COUNT commit(s) in last 24 hours"
+      git log --oneline --since="24 hours ago" | head -5 | sed 's/^/     /'
+    else
+      echo "   • No commits in last 24 hours"
+    fi
+    
+    # Show changed files
+    CHANGED_COUNT=$(git diff --name-only HEAD~1 2>/dev/null | wc -l | tr -d ' ')
+    if [ "$CHANGED_COUNT" -gt 0 ]; then
+      echo ""
+      echo "   • $CHANGED_COUNT file(s) changed since last commit"
+      git diff --name-only HEAD~1 | head -10 | sed 's/^/     /'
+    fi
+  else
+    echo "   ℹ️  Not a git repository"
+  fi
+  
+  echo ""
+  echo "═══════════════════════════════════════════════════════════"
+  echo ""
+  echo "🚀 Ready to update journal!"
+  echo "   Open Warp AI Agent and say:"
+  echo "   \"Update the project journal with today's work\""
+  echo ""
+
+tags:
+  - documentation
+  - maintenance
+  - project-management
+  - journal
+  - universal-template
+
+# This workflow is universal and works with any project
+# No arguments needed - it just displays information and prompts user
+# to interact with the AI agent using natural language
