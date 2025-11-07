@@ -281,14 +281,35 @@ Free to use, modify, and distribute. Commercial use allowed.
 
 ---
 
-## 🙏 Credits
+## 🤖 Built Through Human-AI Collaboration
 
-**Created by:** [Your Name]  
-**Inspired by:** Real-world use in DICOM medical imaging project  
-**Built for:** The Warp community  
+This project was collaboratively developed with **Claude (Anthropic)** as an AI development partner:
+
+**Bryan Kaufman (Human):**
+- Problem identification from production use (medical imaging/DICOM)
+- Requirements and constraints definition
+- Architectural decision-making
+- Production testing and validation
+
+**Claude (Anthropic AI):**
+- System architecture design (4-component model)
+- Implementation (2,722 lines of templates and documentation)
+- Automation system and GitHub integration
+- Documentation framework creation
+
+**Together:** Iterative refinement, debugging, and evolution over ~48 hours
+
+This showcases what's possible when human domain expertise combines with AI implementation capabilities in Warp's agentic development environment.
+
+**Learn more:** See `LAUNCH_POST_COLLABORATIVE.md` for the full collaboration story.
+
+---
+
+## 🙏 Acknowledgments
 
 **Special thanks to:**
-- Warp team for building an amazing AI-powered terminal
+- Warp team for building an amazing AI-powered terminal and enabling agentic development
+- Anthropic for Claude's capabilities
 - Early adopters and contributors
 - The open source community
 
